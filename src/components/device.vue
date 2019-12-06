@@ -84,13 +84,13 @@ export default {
         window.localStorage.setItem("Ble_device_id", id);
       },
       function(reason) {
-        
-      });   
+      
+      });
     }
   },
   created: function() {},
   mounted: function() {
-    
+ 
   },
   computed: {
     ...mapGetters("aieggy", {

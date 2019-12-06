@@ -1,7 +1,10 @@
+// import languageConfig from "../../assets/language.json";
+
 const state = {
   devices: [],
   blescanflag: false,
-  speed: 40
+  speed: 40,
+  language: ""
 }
 
 //开启通知接收设备返回值
@@ -77,6 +80,11 @@ const getters = {
   },
   getspeed(state) {
     return state.speed;
+  },
+  getLanguage(state) {
+    if (window.localStorage.getItem("language")) state.language = window.localStorage.getItem("language");
+    else state.language = "English";
+    return state.language;
   }
 }
 
@@ -113,10 +121,10 @@ const mutations = {
           if (device[i].name == "AIeggy_Code") {
             var num = i;
             ble.connect(device[num].id, function () {
-              window.plugins.toast.showLongCenter("connect successful");
+              // window.plugins.toast.showLongCenter("connect successfully");
               window.localStorage.setItem("Ble_device_id", device[num].id);
             }, function (reason) {
-              window.plugins.toast.showLongCenter("connect failed");
+              // window.plugins.toast.showLongCenter("connect failed");
             })
           }
         }
@@ -151,6 +159,9 @@ const actions = {
   },
   invokeNotify(context) {
     context.commit('notifyData');
+  },
+  invokeLanguage(context, curLanguage) {
+    state.language = curLanguage;
   }
 }
 

@@ -1,10 +1,13 @@
 <template>
   <div id="ble" :style="{background: 'url(' + cardbg + ') no-repeat', backgroundSize: 'cover'}">
+    <div class="languageBox">
+      <language></language>
+    </div>
     <div class="noticebox centerEle">
-      <div class="noticeTitle text"><span class="centerEle">{{noticeTitle}}</span></div>
+      <div class="noticeTitle text"><span class="centerEle" v-if="noticeTitleKey">{{languageConfig[curLanguage][noticeTitleKey]}}</span></div>
       <div class="close" @click="close"><img :src="offBtn"></div>
       <div class="content">
-        <div class="noticeMsg text centerEle" v-if="uniqDevices.length == 0 && !searching" v-html="noticeMsg"></div>
+        <div class="noticeMsg text centerEle" v-if="uniqDevices.length == 0 && !searching && noticeMsgKey" v-html="languageConfig[curLanguage][noticeMsgKey]"></div>
         <div class="searchBox centerEle" v-if="searching">
           <div class="spinner centerEle">
             <div class="spinner-container container1">
@@ -29,7 +32,7 @@
         </div>
         <div class="devicebox">
           <div class="deviceWrap">
-            <ul :style="{width: uniqDevices.length * 1.2 + 'rem'}">
+            <ul :style="{width: uniqDevices.length * 2.4 + 'rem'}">
               <li v-for="(item, index) in uniqDevices" :key="index" @click="connect(item)" class="deviceList">
                 <div class="deviceIcon"><img class="centerEle" :src="deviceIcon"></div>
                 <div class="devicename"><span class="centerEle">{{ "aieggy_" + item.slice(-3) }}</span></div>
@@ -48,6 +51,9 @@
 
 <script>
 import {mapState,mapGetters,mapActions} from 'vuex';
+import language from "components/language.vue";
+import languageConfig from "../../assets/language.json";
+
 import cardbg from "../../../static/img/cardbg.png";
 import refreshpic from "../../../static/img/refresh.png";
 import offBtn from "../../../static/img/off.png";
@@ -63,13 +69,17 @@ export default {
       deviceIcon,
       url: "",
       cardbg,
-      noticeTitle: "",
-      noticeMsg: "",
+      // noticeTitle: "",
+      // noticeMsg: "",
+      noticeTitleKey: "",
+      noticeMsgKey: "",
       searching: false,
       devices: [],
-      uniqDevices: []
+      uniqDevices: [],
+      languageConfig,
     }
   },
+  components: { language },
   methods: {
     scan: function () {
       var _this = this;
@@ -82,7 +92,8 @@ export default {
           if (device.name == "AIeggy_Code") {
             _this.devices.push(device.id);
             _this.searching = false;
-            _this.noticeTitle = "Choose Aieggy icon to connect";
+            _this.noticeTitleKey = "noticeTitle_choose_robot";
+            // _this.noticeTitle = _this.languageConfig._this.currentLanguage[_this.noticeTitleKey];
           }  
         }, function (reason) {
             
@@ -90,8 +101,10 @@ export default {
         timer = setTimeout(function () {
           if (_this.devices.length == 0) {
             _this.searching = false;
-            _this.noticeTitle = "No robots found";
-            _this.noticeMsg = "<span>Please ensure your robot is on.<br>Click the below button<br>to search again.</span>"
+            _this.noticeTitleKey = "noticeTitle_no_robot";
+            _this.noticeMsgKey = "noticeMsg_no_robot";
+            // _this.noticeTitle = _this.languageConfig._this.currentLanguage[_this.noticeTitleKey];
+            // _this.noticeMsg = _this.languageConfig._this.currentLanguage[_this.noticeMsgKey];
           }
         }, 5000);
       },function () {
@@ -118,24 +131,27 @@ export default {
     },
     connect: function (id) {
       var _this = this;
-      window.plugins.toast.showLongCenter("connecting");
+      window.plugins.toast.showLongCenter(_this.languageConfig[_this.curLanguage]["toast_connecting"]);
       ble.connect(id, function () {
-        window.plugins.toast.showLongCenter("connect successful");
+        window.plugins.toast.showLongCenter(_this.languageConfig[_this.curLanguage]["toast_con_successful"]);
         window.localStorage.setItem("Ble_device_id", id);
         _this.close();
       }, function (reason) {
-        window.plugins.toast.showLongCenter("connect failed");
+        window.plugins.toast.showLongCenter(_this.languageConfig[_this.curLanguage]["toast_con_fail"]);
       })
     },
     bleEnable: function () {
-      this.noticeTitle = "Searching for robots";
+      this.noticeTitleKey = "noticeTitle_searching";
+      // this.noticeTitle = this.languageConfig.this.currentLanguage[this.noticeTitleKey];
       this.searching = true;
     },
     blenoEnable: function () {
       this.uniqDevices = [];
       this.devices = [];
-      this.noticeTitle = "Bluetooth is off";
-      this.noticeMsg = "<span>Please open your Bluetooth.<br>Click the below button<br>to search again.</span>";
+      this.noticeTitleKey = "noticeTitle_Ble_off";
+      this.noticeMsgKey = "noticeMsg_Ble_off";
+      // this.noticeTitle = this.languageConfig.this.currentLanguage[this.noticeTitleKey];
+      // this.noticeMsg = this.languageConfig.this.currentLanguage[this.noticeMsgKey];
     },
     uniqDevice: function (devices){
       this.uniqDevices = devices;
@@ -163,7 +179,9 @@ export default {
     this.width = window.screen.width;
   },
   computed: {
-
+    ...mapGetters("aieggy", {
+      curLanguage: "getLanguage"
+    })  
   },
   watch: {
     devices: {
@@ -191,6 +209,14 @@ export default {
   overflow: hidden;
 }
 
+.languageBox {
+  position: absolute;
+  width: 0.6rem;
+  height: 0.6rem;
+  top: 0.38rem;
+  right: 0.7rem;
+}
+
 .text {
   text-align: center;
 }
@@ -206,8 +232,10 @@ export default {
 .noticebox {
   width: 80%;
   height: 80%;
-  border-radius: 0.15rem;
+  border-radius: 0.3rem;
   background: rgba(255, 255, 255, 0.2);
+  transform-origin: center;
+  transform: translate(-50%, -50%) scale(0.85);
   overflow-x: scroll;
   overflow-y: hidden;
 }
@@ -220,9 +248,9 @@ export default {
   top: 0;
   transform: translate(-50%, 0);
   -webkit-transform: translate(-50%, 0);
-  border-bottom-right-radius: 0.15rem;
-  border-bottom-left-radius: 0.15rem;
-  font-size: 0.12rem;
+  border-bottom-right-radius: 0.3rem;
+  border-bottom-left-radius: 0.3rem;
+  font-size: 0.3rem;
   color: #fff;
   background: rgb(255, 132, 0);
 }
@@ -250,8 +278,10 @@ export default {
 .noticeMsg {
   width: 100%;
   height: auto;
-  font-size: 0.15rem;
+  font-size: 0.35rem;
   color: rgb(0, 255, 246);
+  padding: 0 0.3rem;
+  box-sizing: border-box;
 }
 
 .bottomBtn {
@@ -263,8 +293,8 @@ export default {
 }
 
 .refresh {
-  width: 0.3rem;
-  height: 0.3rem;
+  width: 0.6rem;
+  height: 0.6rem;
 }
 
 .refresh img {
@@ -274,10 +304,10 @@ export default {
 
 .close {
   position: absolute;
-  width: 0.15rem;
-  height: 0.15rem;
-  top: 0.1rem;
-  right: 0.15rem;
+  width: 0.3rem;
+  height: 0.3rem;
+  top: 0.2rem;
+  right: 0.3rem;
 }
 
 .close img {
@@ -287,13 +317,13 @@ export default {
 
 
 .spinner {
-  width: 0.6rem;
-  height: 0.6rem;
+  width: 1.2rem;
+  height: 1.2rem;
 }
  
 .container1 > div, .container2 > div, .container3 > div {
-  width: 0.12rem;
-  height: 0.12rem;
+  width: 0.24rem;
+  height: 0.24rem;
   background-color: rgb(0, 255, 246);
   border-radius: 100%;
   position: absolute;
@@ -413,12 +443,12 @@ export default {
 .deviceList {
   position: relative;
   float: left;
-  width: 1rem;
+  width: 2rem;
   height: 80%;
   background: rgba(255, 255, 255, 0.6);
-  margin: 0.15rem 0.1rem 0;
+  margin: 0.3rem 0.2rem 0;
   font-size: 0;
-  border-radius: 0.1rem;
+  border-radius: 0.2rem;
   overflow: hidden;
 }
 
@@ -437,7 +467,7 @@ export default {
   bottom: -1px;
   width: 100%;
   height: 20%;
-  font-size: 0.1rem;
+  font-size: 0.2rem;
   text-align: center;
   background: rgb(255, 132, 0);
 }

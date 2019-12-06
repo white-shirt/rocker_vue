@@ -1,5 +1,9 @@
 <template>
     <div id="app" :style="{background: 'url(' + cardbg + ') no-repeat', backgroundSize: 'cover'}">
+      <div class="languageBox">
+        <language></language>
+      </div>
+      <bluetooth class="bluetooth"></bluetooth>
       <div class="cardnav">
         <div class="list">
           <div class="wrap">
@@ -23,7 +27,7 @@
               </div>
             </div>
             <div class="titlebox Rkt">
-              <span>Drive</span>
+              <span>{{languageConfig[curLanguage]["card_title_Drive"]}}</span>
             </div>
           </div>
         </div>
@@ -53,7 +57,7 @@
               </div>
             </div>
             <div class="titlebox Mt">
-              <span>Music</span>
+              <span>{{languageConfig[curLanguage]["card_title_Music"]}}</span>
             </div>
           </div>
         </div>
@@ -74,7 +78,7 @@
               </ul>
             </div>
             <div class="titlebox Lt">
-              <span>Path</span>
+              <span>{{languageConfig[curLanguage]["card_title_Path"]}}</span>
             </div>
           </div>
         </div>
@@ -83,11 +87,15 @@
 </template>
 
 <script>
+import {mapState,mapGetters,mapActions} from 'vuex';
 import torocker from "components/torocker.vue";
 import tomusic from "components/tomusic.vue";
 import tolines from "components/tolines.vue";
-import cardbg from "../../../static/img/cardbg.png";
+import language from "components/language.vue";
+import bluetooth from "components/bluetooth.vue";
+import languageConfig from "../../assets/language.json";
 
+import cardbg from "../../../static/img/cardbg.png";
 import eggpic from "../../../static/img/index/egg.png";
 import bg from "../../../static/img/index/bg.png";
 import linebg from "../../../static/img/index/linebg.png";
@@ -127,17 +135,24 @@ export default {
       pic2,
       pic3,
       eggshadow,
+      languageConfig,
       timeoutMove: false
     };
   },
-  components: { torocker, tomusic, tolines },
+  components: { torocker, tomusic, tolines, language, bluetooth },
   mounted: function() {
     var _this = this;
     setTimeout(function () {
       _this.timeoutMove = true;
     }, 100)
+    
   },
-  methods: {}   
+  methods: {},
+  computed: {
+    ...mapGetters("aieggy", {
+      curLanguage: "getLanguage"
+    })
+  }
 };
 </script>
 
@@ -149,10 +164,28 @@ export default {
   -webkit-text-size-adjust: none;
 }
 
+.languageBox {
+  position: absolute;
+  width: 0.6rem;
+  height: 0.6rem;
+  top: 0.38rem;
+  right: 1.3rem;
+  z-index: 3;
+}
+
+.bluetooth {
+  position: absolute;
+  width: 0.6rem !important;
+  height: 0.6rem !important;
+  top: 0.38rem;
+  right: 0.5rem;
+  z-index: 3;
+}
+
 .cardnav {
   position: relative;
   width: auto;
-  height: 3.5rem;
+  height: 5rem;
   top: 50%;
   transform: translateY(-50%);
   -webkit-transform: translateY(-50%);
@@ -165,10 +198,9 @@ export default {
 
 .list {
   position: relative;
-  top: 0.2rem;
   display: inline-block;
-  width: 2.32rem;
-  height: 3.1rem;
+  width: 4.13rem;
+  height: 5rem;
   margin-left: 0.56rem;
   border-radius: 0.22rem;
   box-sizing: border-box;
@@ -221,7 +253,7 @@ export default {
   top: 0;
   left: 0;
   width: 100%;
-  height: 2.4rem;
+  height: 3.86rem;
 }
 
 .titlebox {
@@ -229,7 +261,7 @@ export default {
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 0.62rem;
+  height: 1rem;
   background: #fff;
 }
 
@@ -239,10 +271,10 @@ export default {
   position: absolute;
   top: 0;
   left: 0;
-  font-size: 0.20rem;
+  font-size: 0.40rem;
   font-weight: bolder;
   text-align: center;
-  line-height: 0.62rem;
+  line-height: 1rem;
 }
 
 .Rkt {
@@ -266,14 +298,14 @@ img {
 .rkbg {
   position: absolute;
   width: 80%;
-  top: 0.2rem;
-  left: 0.2rem;
+  top: 0.4rem;
+  left: 0.4rem;
 }
 
 .egg1 {
   position: absolute;
-  width: 1rem;
-  top: 1.2rem;
+  width: 1.78rem;
+  top: 2.13rem;
   left: 50%;
   transform-origin: center;
   -webkit-transform-origin: center;
@@ -293,37 +325,37 @@ img {
 }
 
 @keyframes egg1move {
-  0% { width: 1rem; top: 1.2rem;}
-  50% { width: 0.75rem; top: 0.5rem;}
-  100% { width: 1rem; top: 1.2rem;}
+  0% { width: 1.78rem; top: 2.13rem;}
+  50% { width: 0.75rem; top: 0.55rem;}
+  100% { width: 1.78rem; top: 2.13rem;}
 }
 
 @-webkit-keyframes egg1move {
-  0% { width: 1rem; top: 1.2rem;}
-  50% { width: 0.75rem; top: 0.5rem;}
-  100% { width: 1rem; top: 1.2rem;}
+  0% { width: 1.78rem; top: 2.13rem;}
+  50% { width: 0.75rem; top: 0.55rem;}
+  100% { width: 1.78rem; top: 2.13rem;}
 }
 
 .linebg {
   position: absolute;
-  width: 1.5rem;
+  width: 2.67rem;
   bottom: 0rem;
-  right: 0.15rem;
+  right: 0.4rem;
 }
 
 .figure1 {
   position: absolute;
-  width: 0.8rem;
+  width: 1.42rem;
   bottom: 0rem;
-  right: -0.03rem;
+  right: -0.1rem;
 }
 
 
 .figcircle {
   position: absolute;
-  width: 0.75rem;
-  height: 0.75rem;
-  top: 1.4rem;
+  width: 1.34rem;
+  height: 1.34rem;
+  top: 2rem;
   left: 0.2rem;
   border-radius: 50%;
   border: 1px rgb(223, 223, 223) solid;
@@ -332,9 +364,9 @@ img {
 
 .figure2 {
   position: absolute;
-  width: 1rem;
-  top: 1.6rem;
-  left: -0.2rem;
+  width: 1.78rem;
+  top: 2.42rem;
+  left: -0.5rem;
 }
 
 .timeoutFigure2move {
@@ -343,17 +375,17 @@ img {
 }
 
 @keyframes figure2move {
-  0% { top: 1.6rem }
-  50% { top: 1.3rem }
-  52% { top: 1.6rem }
-  100% { top: 1.9rem }
+  0% { top: 2.42rem }
+  50% { top: 1.7rem }
+  52% { top: 2.42rem }
+  100% { top: 3rem }
 }
 
 @-webkit-keyframes figure2move {
-  0% { top: 1.6rem }
-  50% { top: 1.3rem }
-  52% { top: 1.6rem }
-  100% { top: 1.9rem }
+  0% { top: 2.42rem }
+  50% { top: 1.7rem }
+  52% { top: 2.42rem }
+  100% { top: 3rem }
 }
 
 .piano {
@@ -365,9 +397,9 @@ img {
 
 .megg {
   position: absolute;
-  width: 0.75rem;
-  bottom: 0.25rem;
-  left: 0.15rem;
+  width: 1.34rem;
+  bottom: 0.5rem;
+  left: 0.3rem;
 }
 
 .timeoutMeggmove {
@@ -377,34 +409,34 @@ img {
 
 
 @keyframes meggmove {
-  0% { bottom: 0.25rem; left: 0.15rem; }
-  12.5% { bottom: 0.45rem; left: 0.40rem; }
-  25% { bottom: 0.25rem; left: 0.7rem; }
-  37.5% { bottom: 0.45rem; left: 1rem; }
-  50% { bottom: 0.25rem; left: 1.3rem; }
-  62.5% { bottom: 0.45rem; left: 1rem; }
-  75% { bottom: 0.25rem; left: 0.7rem; }
-  87.5% { bottom: 0.45rem; left: 0.40rem; }
-  100% { bottom: 0.25rem; left: 0.15rem; }
+  0% { bottom: 0.5rem; left: 0.3rem; }
+  12.5% { bottom: 0.9rem; left: 0.8rem; }
+  25% { bottom: 0.5rem; left: 1.4rem; }
+  37.5% { bottom: 0.9rem; left: 1.9rem; }
+  50% { bottom: 0.5rem; left: 2.4rem; }
+  62.5% { bottom: 0.9rem; left: 2rem; }
+  75% { bottom: 0.5rem; left: 1.4rem; }
+  87.5% { bottom: 0.9rem; left: 0.8rem; }
+  100% { bottom: 0.5rem; left: 0.3rem; }
 }
 
 @-webkit-keyframes meggmove {
-  0% { bottom: 0.25rem; left: 0.15rem; }
-  12.5% { bottom: 0.45rem; left: 0.40rem; }
-  25% { bottom: 0.25rem; left: 0.7rem; }
-  37.5% { bottom: 0.45rem; left: 1rem; }
-  50% { bottom: 0.25rem; left: 1.3rem; }
-  62.5% { bottom: 0.45rem; left: 1rem; }
-  75% { bottom: 0.25rem; left: 0.7rem; }
-  87.5% { bottom: 0.45rem; left: 0.40rem; }
-  100% { bottom: 0.25rem; left: 0.15rem; }
+  0% { bottom: 0.5rem; left: 0.3rem; }
+  12.5% { bottom: 0.9rem; left: 0.8rem; }
+  25% { bottom: 0.5rem; left: 1.4rem; }
+  37.5% { bottom: 0.9rem; left: 1.9rem; }
+  50% { bottom: 0.5rem; left: 2.4rem; }
+  62.5% { bottom: 0.9rem; left: 2rem; }
+  75% { bottom: 0.5rem; left: 1.4rem; }
+  87.5% { bottom: 0.9rem; left: 0.8rem; }
+  100% { bottom: 0.5rem; left: 0.3rem; }
 }
 
 .eggshadow {
   position: absolute;
-  width: 1.1rem;
+  width: 2rem;
   bottom: 0.2rem;
-  left: -0.05rem;
+  left: -0.15rem;
   transform: scale(1);
   transform-origin: center;
   -webkit-transform: scale(1);
@@ -417,27 +449,27 @@ img {
 }
 
 @keyframes shadowmove {
-  0% { bottom: 0.2rem; left: -0.05rem; transform: scale(1); -webkit-transform: scale(1); }
-  12.5% { bottom: 0.2rem; left: 0.25rem; transform: scale(0.8); -webkit-transform: scale(0.8); }
-  25% { bottom: 0.2rem; left: 0.5rem; transform: scale(1); -webkit-transform: scale(1); }
-  37.5% { bottom: 0.2rem; left: 0.85rem; transform: scale(0.8); -webkit-transform: scale(0.8); }
-  50% { bottom: 0.2rem; left: 1.15rem; transform: scale(1); -webkit-transform: scale(1); }
-  62.5% { bottom: 0.2rem; left: 0.85rem; transform: scale(0.8); -webkit-transform: scale(0.8); }
-  75% { bottom: 0.2rem; left: 0.5rem; transform: scale(1); -webkit-transform: scale(1); }
-  87.5% { bottom: 0.2rem; left: 0.25rem; transform: scale(0.8); -webkit-transform: scale(0.8); }
-  100% { bottom: 0.2rem; left: -0.05rem; transform: scale(1); -webkit-transform: scale(1); }
+  0% { bottom: 0.22rem; left: -0.15rem; transform: scale(1); -webkit-transform: scale(1); }
+  12.5% { bottom: 0.22rem; left: 0.6rem; transform: scale(0.8); -webkit-transform: scale(0.8); }
+  25% { bottom: 0.22rem; left: 1.2rem; transform: scale(1); -webkit-transform: scale(1); }
+  37.5% { bottom: 0.22rem; left: 1.7rem; transform: scale(0.8); -webkit-transform: scale(0.8); }
+  50% { bottom: 0.22rem; left: 2.2rem; transform: scale(1); -webkit-transform: scale(1); }
+  62.5% { bottom: 0.22rem; left: 1.8rem; transform: scale(0.8); -webkit-transform: scale(0.8); }
+  75% { bottom: 0.22rem; left: 1.2rem; transform: scale(1); -webkit-transform: scale(1); }
+  87.5% { bottom: 0.22rem; left: 0.6rem; transform: scale(0.8); -webkit-transform: scale(0.8); }
+  100% { bottom: 0.22rem; left: -0.15rem; transform: scale(1); -webkit-transform: scale(1); }
 }
 
 @-webkit-keyframes shadowmove {
-  0% { bottom: 0.2rem; left: -0.05rem; transform: scale(1); -webkit-transform: scale(1); }
-  12.5% { bottom: 0.2rem; left: 0.25rem; transform: scale(0.8); -webkit-transform: scale(0.8); }
-  25% { bottom: 0.2rem; left: 0.5rem; transform: scale(1); -webkit-transform: scale(1); }
-  37.5% { bottom: 0.2rem; left: 0.85rem; transform: scale(0.8); -webkit-transform: scale(0.8); }
-  50% { bottom: 0.2rem; left: 1.15rem; transform: scale(1); -webkit-transform: scale(1); }
-  62.5% { bottom: 0.2rem; left: 0.85rem; transform: scale(0.8); -webkit-transform: scale(0.8); }
-  75% { bottom: 0.2rem; left: 0.5rem; transform: scale(1); -webkit-transform: scale(1); }
-  87.5% { bottom: 0.2rem; left: 0.25rem; transform: scale(0.8); -webkit-transform: scale(0.8); }
-  100% { bottom: 0.2rem; left: -0.05rem; transform: scale(1); -webkit-transform: scale(1); }
+  0% { bottom: 0.22rem; left: -0.15rem; transform: scale(1); -webkit-transform: scale(1); }
+  12.5% { bottom: 0.22rem; left: 0.6rem; transform: scale(0.8); -webkit-transform: scale(0.8); }
+  25% { bottom: 0.22rem; left: 1.2rem; transform: scale(1); -webkit-transform: scale(1); }
+  37.5% { bottom: 0.22rem; left: 1.7rem; transform: scale(0.8); -webkit-transform: scale(0.8); }
+  50% { bottom: 0.22rem; left: 2.2rem; transform: scale(1); -webkit-transform: scale(1); }
+  62.5% { bottom: 0.22rem; left: 1.8rem; transform: scale(0.8); -webkit-transform: scale(0.8); }
+  75% { bottom: 0.22rem; left: 1.2rem; transform: scale(1); -webkit-transform: scale(1); }
+  87.5% { bottom: 0.22rem; left: 0.6rem; transform: scale(0.8); -webkit-transform: scale(0.8); }
+  100% { bottom: 0.22rem; left: -0.15rem; transform: scale(1); -webkit-transform: scale(1); }
 }
 
 .notebox {
@@ -451,9 +483,9 @@ img {
 }
 
 .note1 {
-  top: 0.3rem;
-  left: 0.25rem;
-  width: 0.3rem;
+  top: 0.5rem;
+  left: 0.35rem;
+  width: 0.6rem;
 }
 
 .timeoutnotemove {
@@ -485,19 +517,19 @@ img {
 
 
 @keyframes notemove {
-  0% { top: 0.3rem }
-  30% { top: 0.25rem }
-  50% { top: 0.3rem }
-  80% { top: 0.35rem }
-  100% { top: 0.3rem }
+  0% { top: 0.5rem }
+  30% { top: 0.3rem }
+  50% { top: 0.5rem }
+  80% { top: 0.3rem }
+  100% { top: 0.5rem }
 }
 
 @-webkit-keyframes notemove {
-  0% { top: 0.3rem }
-  30% { top: 0.25rem }
-  50% { top: 0.3rem }
-  80% { top: 0.35rem }
-  100% { top: 0.3rem }
+  0% { top: 0.5rem }
+  30% { top: 0.3rem }
+  50% { top: 0.5rem }
+  80% { top: 0.3rem }
+  100% { top: 0.5rem }
 }
 
 @keyframes notemove1 {
@@ -521,7 +553,7 @@ img {
 }
 
 .lpic0 {
-  width: 1.2rem;
+  width: 2rem;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -529,9 +561,9 @@ img {
 }
 
 .egg2 {
-  width: 0.5rem;
-  top: 1.5rem;
-  left: 0.35rem;
+  width: 0.8rem;
+  top: 2.3rem;
+  left: 0.7rem;
 }
 
 .timeoutegg2move {
@@ -540,17 +572,17 @@ img {
 }
 
 @keyframes egg2move {
-  0% { top: 1.5rem; left: 0.35rem }
-  33% { top: 1.5rem; left: 1.5rem }
-  60% { top: 0.5rem; left: 0.9rem }
-  100% { top: 1.5rem; left: 0.35rem }
+  0% { top: 2.3rem; left: 0.7rem }
+  33% { top: 2.3rem; left: 2.5rem }
+  60% { top: 0.8rem; left: 1.7rem }
+  100% { top: 2.3rem; left: 0.7rem }
 }
 
 @-webkit-keyframes egg2move {
-  0% { top: 1.5rem; left: 0.35rem }
-  33% { top: 1.5rem; left: 1.5rem }
-  60% { top: 0.5rem; left: 0.9rem }
-  100% { top: 1.5rem; left: 0.35rem }
+  0% { top: 2.3rem; left: 0.7rem }
+  33% { top: 2.3rem; left: 2.5rem }
+  60% { top: 0.8rem; left: 1.7rem }
+  100% { top: 2.3rem; left: 0.7rem }
 }
 
 .lpicul {
@@ -560,21 +592,21 @@ img {
 }
 
 .pic1 {
-  width: 0.3rem;
+  width: 0.6rem;
   top: 0.25rem;
   left: 0.25rem;
 }
 
 .pic2 {
-  width: 0.8rem;
-  bottom: 0.2rem;
+  width: 1.5rem;
+  bottom: 0rem;
   left: 0.05rem;
 }
 
 .pic3 {
-  width: 0.45rem;
+  width: 0.8rem;
   right: 0.1rem;
-  bottom: 0.2rem;
+  bottom: 0.1rem;
 }
 
 

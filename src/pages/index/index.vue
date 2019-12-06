@@ -1,6 +1,9 @@
 <template>
   <div id="idxBle" :style="{background: 'url(' + cardbg + ') no-repeat', backgroundSize: 'cover'}">
     <div class="searchbox">
+      <div class="languageBox">
+        <language></language>
+      </div>
       <div :class="['figurebox', timeoutMove ? 'timeoutfigureboxmove' : '']">
         <img class="figurebg" :src="figurebg">
         <img class="bleBtn" @click="search" :src="bleBtn">
@@ -11,6 +14,8 @@
 </template>
 
 <script>
+import language from "components/language.vue";
+
 import bleBtn from "../../../static/img/index/search.png";
 import eggbg from "../../../static/img/index/egg_bg.png";
 import figurebg from "../../../static/img/index/figure_bg.png";
@@ -28,7 +33,7 @@ export default {
       timeoutMove: false
     }
   },
-  components: { },
+  components: { language },
   methods: {
     init: function () {
       var _this = this;
@@ -64,56 +69,64 @@ export default {
     height: 100%;
   }
 
-  .eggbg {
-    position: absolute;
-    width: 1.8rem;
-    height: auto;
-    right: 0.9rem;
-    bottom: 0.5rem;
-  }
+.languageBox {
+  position: absolute;
+  width: 0.6rem;
+  height: 0.6rem;
+  top: 0.38rem;
+  right: 0.7rem;
+}
 
-  .eggbg img {
-    width: 100%;
-  }
+.eggbg {
+  position: absolute;
+  width: 2.8rem;
+  height: auto;
+  right: 0.9rem;
+  bottom: 0.5rem;
+}
 
-  .figurebox {
-    position: relative;
-    left: 1.5rem;
-    top: -4rem;
-    width: 2rem;
-    height: auto;
-  }
+.eggbg img {
+  width: 100%;
+}
 
-  .timeoutfigureboxmove {
-    animation: linear figureMove 2s forwards;
-    -webkit-animation: linear figureMove 2s forwards;
-  }
+.figurebox {
+  position: relative;
+  left: 1.5rem;
+  top: -4rem;
+  width: 3rem;
+  height: auto;
+}
 
-  @keyframes figureMove {
-    0% { top: -4rem; }
-    40% { top: -2rem }
-    70% { top: -4rem; }
-    100% { top: -0.2rem; }
-  }
+.timeoutfigureboxmove {
+  animation: linear figureMove 2s forwards;
+  -webkit-animation: linear figureMove 2s forwards;
+}
 
-  @-webkit-keyframes figureMove {
-    0% { top: -4rem; }
-    40% { top: -2rem }
-    70% { top: -4rem; }
-    100% { top: -0.2rem; }
-  }
+@keyframes figureMove {
+  0% { top: -4rem; }
+  40% { top: -2rem }
+  70% { top: -4rem; }
+  100% { top: -0.2rem; }
+}
 
-  .figurebg {
-    width: 2rem;
-    height: auto;
-  }
+@-webkit-keyframes figureMove {
+  0% { top: -4rem; }
+  40% { top: -2rem }
+  70% { top: -4rem; }
+  100% { top: -0.2rem; }
+}
 
-  .bleBtn {
-    position: absolute;
-    top: 2.1rem;
-    left: 0.58rem;
-    width: 1.05rem;
-    height: auto;
-  }
+.figurebg {
+  width: 3rem;
+  height: auto;
+}
+
+.bleBtn {
+  position: absolute;
+  top: 3.2rem;
+  left: 0.85rem;
+  width: 1.6rem;
+  height: auto;
+}
 
 </style>
